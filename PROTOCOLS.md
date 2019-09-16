@@ -15,17 +15,19 @@ Ridicilous as it seem the resulting hash will be used to encrypt/decrypt data
 
 # Network - Hubs #
 
-- Adding more Hubs to the network requires manual installation and definition in Home, which in turn propagates this change to SecPack and Dummy.
+- The Hub concept is removed from the system as it brings up the problem of adding/removing/updating device physical locations. To solve this, each device would be given a location ( point ) in the floor plan of the house. It is replaced by the SecPack's network monitoring service.
 
-- Each Hub is responsible of finding new devices automatically through "linear discovery" and then, relay that information to SecPack.
-   - Seckpack will then register the new device, give it an internal id, store the command schema and generate a secure key. This key is then relayed to the Hub, which in turn sends it to the Device in order to store the key.
-   - This ledger could also contain which HUB belongs the device, but we would then have to find a new procedure to "move" one device from one Hub to another.
+# Network - SecPack #
+
+ 
+- SecPack will maintain a ledger containing the device and then, register the new device, give it an internal id, store the command schema and generate a secure key. This key is then relayed to the Device in order to store the key.
    
-Linear discovery is when a device first connects to a Hub and asks SecPack if the device is registered. If the Device is not registered, the device sends it's command schema to the SecPack and waits for a key and the assigned id. If the Device is already registered it receives a new key to be stored.
+"Linear discovery" is when a device first connects to a Hub and asks SecPack if the device is registered. If the Device is not registered, the device sends it's command schema to the SecPack and waits for a key and the assigned id. If the Device is already registered it receives a new key to be stored. This new key is to be frequently updated to a random X times a day (where X is a random number 3 to 9)
 
-- Hubs will only receive commands from devices and the SecPack, so any device adition/removal must be properly updated in the hosts file.
+Note: Advancements on networking and bandwidth should allow for this number of random times a day to be executed up to 20 times a day or by a hourly basis, but one should account for the number of devices and possible burdens in the household.
+
 
 # Network - Core #
 
-- All Core communication to a Device...
+- Core will manage the frontend-to-backend commands. It will be responsible to relay commands to SecPack, which in turn, will be relaying commands to the device after proper whitelisting check on the commands the device has.
 
